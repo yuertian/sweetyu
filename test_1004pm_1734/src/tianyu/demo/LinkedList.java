@@ -322,4 +322,129 @@ public class LinkedList {
         }//所有节点遍历结束
         return newHead.next;
     }
+
+    //判断回文
+    public boolean chkPalindrome(ListNode A) {
+        // write code here
+        if (A == null) { //此处假设空链表为回文
+            return true;
+        }
+        if (A.next == null) {//只有一个元素，就是回文
+            return true;
+        }
+        //找中间节点，将后半部分逆置，在进行前后对比
+        int len = size(A);
+        int steps = len / 2;
+        ListNode B = A;
+        for (int i = 0; i < steps; i++) {
+            B = B.next;
+        }//循环结束，B指向链表中间节点
+        //以B为头结点，逆置后半段
+        ListNode prev = null;
+        ListNode cur = B;
+        while (cur != null) {
+            ListNode next = cur.next;
+            if (next == null) {
+                B = cur;//让B指向新链表的头部
+            }
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }//逆置结束
+        //对比两个链表内容是否相同
+        while (B != null) {
+            if (A.val != B.val) {
+                return false;//对应元素不相等，一定不是回文
+            }
+            A = A.next;
+            B = B.next;
+        }
+        return true;
+    }
+    public int size(ListNode A) {
+        int size = 0;
+        for (ListNode cur = A;
+             cur != null; cur = cur.next) {
+            size++;
+        }
+        return size;
+    }
+
+    //判断是否相交
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        //先分别求两个链表的长度
+        int lenA = size(headA);
+        int lenB = size(headB);
+        //让长的先走差值步
+        if (lenA > lenB) {
+            for (int i = 0; i < (lenA - lenB); i++) {
+                headA = headA.next;
+            }
+        } else {
+            for (int i = 0; i < (lenB - lenA); i++) {
+                headB = headB.next;
+            }
+        }
+        //分别让两个链表同时移动，判断两节点是否相同
+        while (headA != null && headB != null) {
+            if (headA == headB) {//找到相同节点
+                return headA;
+            }
+            headA = headA.next;
+            headB = headB.next;
+        }
+        return null;//循环结束，没有找到
+    }
+
+    //判断是否带环
+    public boolean hasCycle(ListNode head) {
+        //先判断链表是否为空
+        if (head == null) {
+            return false;
+        }
+        //创建两个快慢指针，如果带环，fast和slow一定会相遇
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //找到入环的第一个节点
+    public ListNode detectCycle(ListNode head) {
+        //从链表头部出发，到入环的第一个节点的距离
+        //和从快慢指针交汇处，到入环的第一个节点的距离相等
+        if (head == null) {
+            return null;
+        }
+        ListNode fast = head;
+        ListNode slow = head;
+        //找到快慢指针交汇的节点
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                break;
+            }
+        }
+        if (fast == null || fast.next == null) {
+            return null;//不带环
+        }
+        //循环结束，快慢指针重合
+        //创建两个新的指针从链表头部和快慢指针重合的节点同时移动，直到相遇
+        ListNode cur1 = head;
+        ListNode cur2 = fast;
+        while (cur1 != cur2) {
+            cur1 = cur1.next;
+            cur2 = cur2.next;
+        }
+        //循环结束，cur1和cur2重合
+        return cur1;
+    }
+
 }
