@@ -14,6 +14,8 @@ public class BinaryTree {
         }
     }
 
+
+
     public List<Integer> preOrderTraversal(TreeNode root) {
         List<Integer> result  = new ArrayList<>();
         if (root == null) {
