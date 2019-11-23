@@ -80,7 +80,7 @@ public class SortDemo {
     //堆排序（升序要建大堆，降序要建小堆）
     public static void heapSort(int[] array) {
         //1.创建堆
-        creatHeap(array);
+        createHeap(array);
         //2.循环取出堆顶的最大元素，放在最后面
         for (int i = 0; i < array.length; i++) {
             //待排序区间 [0, array.length - 1 - i)
@@ -91,32 +91,38 @@ public class SortDemo {
             //3)结束位置
             shiftDown(array, 0, array.length - 1 - i);
         }
+    }
 
-        private static void creatHeap(int[] array) {
+    //创建堆
+    private static void createHeap(int[] array) {
             //从最后一个非叶子节点开始出发，从后往前向下调整
             for (int i = (array.length - 1 - 1) / 2; i >= 0; i--) {
-                shiftDown(array, i, array.length);
+                shiftDown(array, i, array.length - 1);
             }
-        }
+    }
 
-        //O(logN)
-        private static void shiftDwon(int[] array, int index, int size) {
-            int parent = index;
-            int child = 2 * index + 1;
-            while (child < size) {
-                if (child + 1 < size && array[child + 1] > array[child]) {
-                    child = child + 1;
-                }//此时 child 就指向左右子树较大的那一个
+    //O(logN)
+    // 向下调整
+    private static void shiftDown(int[] array, int index, int size) {
+        int parent = index;
+        int child = 2 * parent + 1;
+        while (child < size) {
+            if (child + 1 < size && array[child + 1] > array[child]) {
+                child = child + 1;
+            }//此时 child 就指向左右子树较大的那一个
+            if (array[child] > array[parent]) {
                 swap(array, child, parent);
-
-
-                parent = child;
-                child = 2 * index + 1;
+            } else {
+                break;
             }
-
+            parent = child;
+            child = 2 * parent + 1;
         }
+    }
 
-
+    //快速排序
+    public static void quickSort(int[] array) {
+        
     }
 
     public static void swap(int[] array, int x, int y) {
@@ -131,6 +137,7 @@ public class SortDemo {
         //shellSort(arr);
         //selectSort(arr);
         //bubbleSort(arr);
+        heapSort(arr);
         System.out.println(Arrays.toString(arr));
     }
 }
