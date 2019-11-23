@@ -122,7 +122,45 @@ public class SortDemo {
 
     //快速排序
     public static void quickSort(int[] array) {
-        
+        //参数的含义是需要排序的区间
+        quickSortHelper(array, 0, array.length - 1);
+    }
+
+    private static void quickSortHelper(int[] array, int left, int right) {
+        if (left >= right) {
+            return;
+        }//下标越界
+
+        //找到一个基准值，左侧元素都比他小，右侧元素都比它大
+        int baseIndex = partition(array, left, right);
+        //再对基准值左侧的所有元素进行快速排序
+        quickSortHelper(array, left, baseIndex - 1);
+        //再对基准值右侧的所有元素进行快速排序
+        quickSortHelper(array, baseIndex + 1, right);
+    }
+
+    private static int partition(int[] array, int left, int right) {
+        int baseIndex = right;
+        int baseValue = array[baseIndex];
+        while (left < right) {
+            while (left < right && array[left] <= baseValue) {
+                left++;
+            }//循环结束，left指向第一个比baseValue大的元素
+
+            while (left < right && array[right] >= baseValue) {
+                right--;
+            }//循环结束，right指向第一个比baseValue大的元素
+
+            //两个元素都找到，就进行交换
+            swap(array, left, right);
+        }//循环结束，left与right相遇，且相遇的这个元素一定比基准值大
+        //两种情况导致循环结束：
+        //1.left++：上一次循环结束，left和right进行了一次交换，交换后的right已经指向比基准值大的元素
+        //2.right--：left与right相遇前，left已经指向一个比基准值大的元素了
+
+        //让基准值与left/right（大于基准值）交换
+        swap(array, left, baseIndex);//交换后，left左边的元素都小于基准值，右边元素都大于基准值
+        return left;//返回基准值得下标
     }
 
     public static void swap(int[] array, int x, int y) {
@@ -137,7 +175,8 @@ public class SortDemo {
         //shellSort(arr);
         //selectSort(arr);
         //bubbleSort(arr);
-        heapSort(arr);
+        //heapSort(arr);
+        quickSort(arr);
         System.out.println(Arrays.toString(arr));
     }
 }
