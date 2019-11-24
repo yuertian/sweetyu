@@ -2,6 +2,7 @@ package tianyu19_1112;
 
 
 import java.util.Arrays;
+import java.util.Stack;
 
 public class SortDemo {
     //插入排序，升序为例
@@ -163,6 +164,106 @@ public class SortDemo {
         return left;//返回基准值得下标
     }
 
+    public static void quickSortByLoop(int[] array) {
+        //先创建一个栈，栈里存的是待处理区间元素的下标
+        Stack<Integer> stack = new Stack<>();
+        //初始情况下，待处理区间就是整个数组
+        stack.push(array.length - 1);
+        stack.push(0);
+        while (!stack.isEmpty()) {
+            //取栈顶元素，栈顶元素就是我们要处理的区间
+            int left = stack.pop();
+            int right = stack.pop();
+            if (left >= right) {
+                continue;
+            }
+            //对于当前待处理区间进行整理
+            int index = partition(array, left, right);
+            //接下来要处理的区间再入栈
+            stack.push(index - 1);
+            stack.push(left);
+
+            stack.push(right);
+            stack.push(index + 1);
+        }
+
+    }
+
+    //归并排序
+    public static void mergeSort(int[] array) {
+        //后两个参数表示需要归并排序的区间  [0, array.length)
+        mergeSortHelper(array, 0, array.length);
+    }
+
+    private static void mergeSortHelper(int[] array, int left, int right) {
+        //[left, right)构成了需要进行归并排序的区间
+        //如果区间为空，或者区间内只有一个元素，则不需要排序
+        if (left >= right || right - left == 1) {
+            return;
+        }
+        //将这个区间一分为二，分别递归进行归并排序，
+        //有序后再进行合并
+        //[left, mid)
+        //[mid, right)
+        int mid = (left + right) / 2;
+        mergeSortHelper(array, left, mid);
+        mergeSortHelper(array, mid, right);
+
+        merge(array, left, mid, right);
+    }
+
+    //归并
+    private static void merge(int[] array, int left, int mid, int right) {
+        //创建一段临时空间辅助进行归并
+        //这个临时空间的长度应为，要进行归并的两个区间之和
+        int length = right - left;
+        int[] outPut = new int[length];
+        int outIndex = 0;//表示临时空间末尾元素的下标
+        int i = left;//前一个区间首元素的下标 [left, mid]
+        int j = mid; //后一个区间首元素的下标  [mid, right]
+        //合并两个元素，每次选较小值插在outPut末尾
+        while (i < mid && j < right) {
+            if (array[i] <= array[j]) {//这里要加上= 保持排序的稳定性
+                outPut[outIndex++] = array[i++];
+            } else {
+                outPut[outIndex++] = array[j++];
+            }
+        }//循环结束，其中一个区间一定有剩余，将其全部元素添加在outPut的末尾
+        while (i < mid) {
+            //把前一个区间里剩余的所有元素插入outPut末尾
+            outPut[outIndex++] = array[i++];
+        }
+        while (j < right) {
+            //把后一个区间里剩余的所有元素插入outPut末尾
+            outPut[outIndex++] = array[j++];
+        }
+
+        //最后一步，把outPut中的所有元素拷回原来的区间
+        for (int k = 0; k < length; k++) {
+            array[left + k] = outPut[k];
+        }
+    }
+
+    public static void mergeSortByLoop(int[] array) {
+        //借助下标的相关规律来进行分组
+        for (int gap = 1; gap < array.length; gap *= 2) {
+            for (int i = 0; i < array.length; i += 2 * gap) {
+                //这个循环负责在gap为指定值的情况下，把所有的区间进行归并
+                // [beg, mid)  [mid, end)
+                int beg = i;
+                int mid = i + gap;
+                int end = i + (2 * gap);
+                if (mid > array.length) {
+                    mid = array.length;
+                }
+                if (end > array.length) {
+                    end = array.length;
+                }
+                merge(array, beg, mid, end);
+            }
+        }
+    }
+
     public static void swap(int[] array, int x, int y) {
         int tmp = array[x];
         array[x] = array[y];
@@ -176,7 +277,9 @@ public class SortDemo {
         //selectSort(arr);
         //bubbleSort(arr);
         //heapSort(arr);
-        quickSort(arr);
+        //quickSort(arr);
+        //mergeSort(arr);
+        mergeSortByLoop(arr);
         System.out.println(Arrays.toString(arr));
     }
 }
