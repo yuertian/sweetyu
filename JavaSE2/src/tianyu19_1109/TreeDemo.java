@@ -16,83 +16,18 @@ public class TreeDemo {
     }
 
 
-    public static void main(String[] Args) {
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNext()) {
-            String line = scanner.next();
-            //line 就是一组现需遍历的结果（带 #）
-            TreeNode root = buildTree(line);
-            inOrder(root);
-            System.out.println();
-        }
-    }
+//    public static void main(String[] Args) {
+////        Scanner scanner = new Scanner(System.in);
+//        while (scanner.hasNext()) {
+//            String line = scanner.next();
+//            //line 就是一组现需遍历的结果（带 #）
+//            TreeNode root = buildTree(line);
+//            inOrder(root);
+//            System.out.println();
+//        }
+//    }
 
-    static int index = 0;
-    public static TreeNode buildTree(String line) {
-        index = 0;
-        return createTreePreOrder(line);
-    }
 
-    //辅助完成递归
-    public static TreeNode createTreePreOrder(String line) {
-        char c = line.charAt(index);
-        if (c == '#') {
-            return null;
-        }
-        TreeNode root = new TreeNode(c);
-        index++;
-        root.left = createTreePreOrder(line);
-        index++;
-        root.right = createTreePreOrder(line);
-        return root;
-    }
-
-    //中序遍历
-    public static void inOrder(TreeNode root) {
-        if (root == null) {
-            return;
-        }
-        inOrder(root.left);
-        System.out.println(root.val + " ");
-        inOrder(root.right);
-    }
-
-    public void preOrder(TreeNode root) {
-        stack<TeeNode> stack = new stack<>();
-        if (root == null) {
-            return;
-        }
-        stack.push(root);
-        while (!stack.isEmpty()) {
-            TreeNode cur = stack.pop;
-            System.out.println(cur.val);
-            if (root.right != null) {
-                stack.push(root.right);
-            }
-            if (root.right != null) {
-                stack.push(root.right);
-            }
-        }
-    }
-
-    public void inOrder(TreeNode root) {
-        Stack<TreeNode> stack = new Atack<>();
-        TreeNode cur = stack.push(root);
-        if (root == null) {
-            return;
-        }
-        while (true) {
-            while (cur != null) {
-                stack.push(cur.left);
-                cur = cur.left;
-            }
-            if (!stack.isEmpty) {
-                break;
-            }
-            TreeNode top = stack.pop(cur);
-        }
-
-    }
 
     private List<List<Integer>> result = new ArrayList<>();
     //层序遍历
@@ -106,7 +41,7 @@ public class TreeDemo {
 
     //辅助完成递归遍历的过程
    private void helper(TreeNode root, int level) {
-       if (level == result.size) {
+       if (level == result.size()) {
            result.add(new ArrayList<>());
        }
        result.get(level).add(root.val);
@@ -178,25 +113,42 @@ public class TreeDemo {
         return left == null ? pRootOfTree : left;
     }
 
+    //根据先序遍历与中序遍历构建二叉树
     private int index = 0;
     public TreeNode buildTree(int[] preOrder, int[] inOrder) {
         index = 0;
         return buildTreeHelper(preOrder, inOrder, 0, inOrder.length);
     }
-
-    private TreeNode buildTreeHelper(int[] preOrde,int[] inOrder,
+                                     //先序遍历的结果   //中序遍历的结果
+    private TreeNode buildTreeHelper(int[] preOrder,int[] inOrder,
                                      int inOrderLeft, int inOrderRight) {
-        if (inorderLeft >= inOrderLeft) {
+        //先判定非法情况
+        if (inOrderLeft >= inOrderRight) {
+            //这个子树的中序遍历是没有的，这就是个空子树
             return null;
         }
-        if (index >= preOrde.length) {
+        if (index >= preOrder.length) {
             return null;
         }
-        TreeNode root = new TreeNode(preOrde[index]);
-        index++;
-        int pos = find(inOrder, inOrderLeft, inOrderRight, int val);
-        root.left = buildTreeHelper(preOrde, inOrder, inOrderLeft, pos);
-        root.right = buildTreeHelper(preOrde, inOrder, pos + 1, inOrderRight)
+        //取出当前值构造当前子树的根节点
+        TreeNode root = new TreeNode(preOrder[index]);
+        index++;//取完这个节点就可以取下一个节点了
+        //需要找到这个节点在中序遍历中的位置
+        //只要 先序遍历 和 中序遍历 序列都是对的，pos就一定能够找到
+        int pos = find(inOrder, inOrderLeft, inOrderRight, root.val);
+        root.left = buildTreeHelper(preOrder, inOrder, inOrderLeft, pos);
+        root.right = buildTreeHelper(preOrder, inOrder, pos + 1, inOrderRight);
+        return root;
+    }
+
+    //辅助函数
+    private int find(int[] inOrder, int inOrderLeft, int inOrderRight, int val) {
+        for (int i = inOrderLeft; i < inOrderRight; i++) {
+            if (inOrder[i] == val) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 

@@ -12,7 +12,7 @@ public class Heap {
             int min = left;
             int right = 2 * index + 2;//当前节点有孩子的下标
             if (right < size) {
-                if (array[rigth] < array[left]) {
+                if (array[right] < array[left]) {
                     //判断右孩子是否越界
                     //如果右孩子越界，min依然是left
                     min = right;
@@ -33,7 +33,28 @@ public class Heap {
         }
     }
 
-    public static void crateHeap(int array, int size) {
+    //入队列（大堆为例）
+    public static void shiftUp(int[] array, int index) {
+        while (index > 0) {
+            int parent = (index - 1) / 2;
+            if (array[parent] >= array[index]) {
+                break;
+            }
+
+            int tmp = array[parent];
+            array[parent] = array[index];
+            array[index] = tmp;
+
+            index = parent;
+        }
+    }
+
+    //出队列
+    //为了防止破坏堆的结构，删除时并不是直接将堆顶元素删除，
+    // 而是用数组的最后一个元素替换堆顶元素，然后通过向下调整方式重新调整成堆
+
+
+    public static void crateHeap(int[] array, int size) {
         //co从最后一个非叶子节点出发，
         //size - 1 表示最后一个元素的下标
         //再-1  再 /2 表示最后一个非叶子节点
