@@ -1,9 +1,6 @@
 package LeetCode_19_1207;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 class Solution {
     public int singleNumber(int[] nums) {
@@ -58,6 +55,44 @@ class Solution {
             }
             return count;
         }
-        
+
+        public List<String> topKFrequent(String[] words, int k) {
+            //统计每个单词出现的次数，Map 来搞定
+            Map<String,Integer> map = new HashMap<>();
+            for (String w : words) {
+                int count = map.getOrDefault(w, 0);
+                map.put(w, count + 1);
+            }
+            //把这些单词放在一个 ArrayList 中，并进行排序
+            //自定制比较规则
+            List<String> result = new ArrayList<>(map.keySet());
+            //在 sort 方法的第二个参数中指定一个比较器对象，
+            //来描述自定制比较规则（按出现次数来排序）
+            Collections.sort(result, new MyComp(map));
+            //subList 能够返回一个 List 中的一个子区间
+            //[0, k) 前闭后开区间
+            return result.subList(0, k);
+        }
+
+        class MyComp implements Comparator<String> {
+            private Map<String, Integer> map = null;
+
+            public MyComp(Map<String, Integer> map) {
+                this.map = map;
+            }
+        }
+
+        @Override
+        public int compare(String o1, String o2) {
+            int count1 = map.get(o1);
+            int count2 = map.get(o2);
+            if (count1 == count2) {
+                //就按字符串自身的大小来决定先后顺序
+                return o1.compareTo(o2);
+            }
+            //降序排序写成 count2 - count1
+            //升序排序写成 count1 - count2
+            return count2 - count1;
+        }
     }
 }
