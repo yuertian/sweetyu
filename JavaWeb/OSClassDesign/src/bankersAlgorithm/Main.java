@@ -7,15 +7,13 @@ public class Main {
     public static int reType = 0;
     public static int proCount = 0;
 
-    public static int getReType() {
-        return reType;
-    }
+    public static int[] Ava = new int[proCount];
+    public static int[][] Max = new int[proCount][reType];
+    public static int[][] All = new int[proCount][reType];
+    public static int[][] Need = new int[proCount][reType];
+    public static boolean[] Finish = new boolean[proCount];
 
-    public static int getProCount() {
-        return proCount;
-    }
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         Scanner input = new Scanner(System.in);
 
@@ -26,9 +24,25 @@ public class Main {
         proCount = input.nextInt();//所有进程数
 
         //初始化资源分配情况
-        Init.init();
+        Init.init( Ava, All, Need);
+        Max = Init.Max(All, Need);
+        ShowTest.showInit(proCount, reType, Ava,Max,All,Need);
 
-        Bank.bank();
+        System.out.println("对当前进行安全性检查");
+//        SafeTest.safe();
+        Thread t = new Thread();
+        t.sleep(1000);
+        System.out.print(".");
+        t.sleep(1000);
+        System.out.print(".");
+        t.sleep(1000);
+        System.out.print(".");
+        t.sleep(1000);
+        boolean isSafe = SafeTest.safe(reType, proCount, Ava, All, Need);
+        if (isSafe == true) {
+            System.out.println("进程可以提出资源申请");
+            Bank.bank(reType, Ava, All, Need);
+        }
 //        System.out.println();
         //判断当前状态是否安全
         //通过银行家算法判断

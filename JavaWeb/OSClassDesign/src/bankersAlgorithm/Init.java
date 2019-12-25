@@ -6,32 +6,12 @@ import java.util.Scanner;
 public class Init {
     public static int resourse = Main.reType;
     public static int process = Main.proCount;
-    public static int[] Ava = new int[resourse];
-    public static int[][] All = new int[process][resourse];
-    public static int[][] Need = new int[process][resourse];
-    public static int[] R = new int[resourse];
-    public static int[] P = new int[process];
-    public static int[] N = new int[process];
+//    public static int[][] All = new int[process][resourse];
+//    public static int[][] Need = new int[process][resourse];
+    public static int[][] Max = new int[process][resourse];
+    public static boolean[] finishState = new boolean[Main.proCount];
 
-    public static int[] getAva() {
-        return Ava;
-    }
-
-    public static int[][] getAll() {
-        return All;
-    }
-
-    public static int[][] getNeed() {
-        return Need;
-    }
-
-    public static int[] getR() {
-        return R;
-    }
-
-
-
-    public static void init(){
+    public static void init(int[] Ava, int[][] All, int[][] Need){
 
         Scanner input = new Scanner(System.in);
 
@@ -53,42 +33,40 @@ public class Init {
 
         System.out.println("请输入所有进程还需分配的资源情况：");
         for (int i = 0; i < process; i++) {
-            System.out.print("Need" + i + "=");
+            System.out.print("Need" + i + " = ");
             for (int j = 0; j < resourse; j++) {
                 Need[i][j] =input.nextInt();
             }
         }
+
     }
 
     //各类资源总数
-    public static int[] resourceSum(){
-        for (int r = 0; r < resourse; r++) {
-            for (int p = 0; p < process; p++){
-                R[r] = Ava[p] + All[p][r] + Need[p][r];
-            }
-        }
-        return R;
-    }
-
-    //各个进程对各类资源的最大需求数
-    public static int[] reNeedMax() {
-        for (int p = 0; p < process; p++) {
-            for (int r = 0; r < resourse; r++) {
-                P[p] = All[p][r] + Need[p][r];
-            }
-        }
-        return P;
-    }
-
-//    //各个进程的需求量之和
-//    public static int[] needMax() {
-//        for (int i = 0; i < process; i++) {
-//            N[i] = 0;
-//            for (int j = 0; j < resourse; j++) {
-//                N[i]+= Need[i][j];
+//    public static int[] resourceSum(){
+//        for (int r = 0; r < resourse; r++) {
+//            for (int p = 0; p < process; p++){
+//                R[r] = Ava[p] + All[p][r] + Need[p][r];
 //            }
 //        }
-//        return N;
+//        return R;
 //    }
+
+    //各个进程对各类资源的最大需求数
+    public static int[][] Max(int[][] All, int[][] Need) {
+        for (int p = 0; p < process; p++) {
+            for (int r = 0; r < resourse; r++) {
+                Max[p][r] = All[p][r] + Need[p][r];
+            }
+        }
+        return Max;
+    }
+
+    public static boolean[] finishState() {
+        for (int i = 0; i < process; i++) {
+            finishState[i] = false;
+        }
+        return finishState;
+    }
+
 
 }
