@@ -5,20 +5,23 @@ import java.util.Arrays;
 //安全检查性算法
 public class SafeTest {
     //工作向量，表示系统可提供给进程继续运行的各类资源数目
-    public static int[][] Work = new int[Main.proCount][Main.reType];
-    //进程状态，初值为0，表示进程还处于未完成状态
+    public static int[] Work = new int[Main.reType];
+    private static int[][] Sum = new int[Main.proCount][Main.reType];
     private static int[] safeSequence = new int[Main.proCount];
+    public static boolean[] Finish = new boolean[Main.proCount];
 
     //在进程中查找符合条件的进程
     //1.finishState = false;
     //2. Need < work;
     public static boolean safe( int r, int p, int[] Ava, int[][] All, int[][] Need) {
-        //在安全性检查算法开始执行时，work = Available
-        for (int i = 0; i < r; i++) {
-            Work[0][i] = Ava[i];
-        }
         int count = 0;//记录已完成的进程
-
+        int index = 0;//安全序列的下标
+        for (int i = 0; i < r; i++) {
+            Work[i] = Ava[i];
+        }
+        for (int i = 0; i < p; i++) {
+            Finish[i] = false;
+        }
         while (true) {
             boolean flag = false;//判断进程状态是否更新
             //循环判断每一个进程是否满足条件
@@ -26,29 +29,37 @@ public class SafeTest {
                 int count2 = 0;
                 flag = false;
                 //如果满足条件，更新Work,更新进程状态
-                if (Main.Finish[i] == false) {
+                if (Finish[i] == false) {
                     for (int j = 0; j < r; j++){
                         //只要有一个不满足就退出循环
-                        if (Need[i][j] > Work[i][j]){
+                        if (Need[i][j] > Work[j]){
                             break;
                         }
                         count2++;//记录满足条件的资源数
                     }//循环结束，如果count2 = r,说明Need <= Work
                     if (count2 == r) {
+                        safeSequence[index] = i;//安全序列插入进程数
+                        Finish[i] = true;//状态置为已完成
                         for (int j = 0; j < r; j++) {
-                            Work[i][j] = All[i][j] + Work[i][j];
+                            Sum[i][j] = Work[j] + All[i][j];
                         }
-                        Main.Finish[i] = true;//状态置为已完成
-                        count++;//记录已完成的进程数
+                        //打印资源分配情况
+                        ShowTest.showSafe(i, index, safeSequence, Work, All, Need, Sum, Finish);
+                        for (int j = 0; j < r; j++) {
+                            Work[j] = All[i][j] + Work[j];
+                        }
+                        index++;
                         flag = true;
-                        safeSequence[i] = i;
+                        count++;//记录已完成的进程数
                     }
                 }
             }
             //安全
             if (count == p) {
-                System.out.println("当前状态安全");
+                System.out.println("当前状态安全!");
                System.out.println("安全序列为：" + Arrays.toString(safeSequence));
+//               //打印资源分配情况
+//                ShowTest.showSafe(p, safeSequence, Work, Need, All, Sum, Finish);
                 return true;
             }
             if (flag == false) {
@@ -58,36 +69,4 @@ public class SafeTest {
         }
     }
 
-//    public static boolean isSafe() {
-//        boolean s = safe(int );
-//        if (s == true){
-//            return true;
-//        }else {
-//            return false;
-//        }
-//    }
-
-
-
-//    public static int[] workSum() {
-//        int[] sum = new int[r];
-//        for (int i = 0; i < p; i++) {
-//            sum[i] = 0;
-//            for (int j = 0; j < r; j++) {
-//                sum[i] += Work[j];
-//            }
-//        }
-//        return sum;
-//    }
-//
-//    public static int[] needSum() {
-//        int[] sum = new int[r];
-//        for (int i = 0; i < p; i++) {
-//            sum[i] = 0;
-//            for (int j = 0; j < r; j++) {
-//                sum[i] += Need[i][j];
-//            }
-//        }
-//        return sum;
-//    }
 }
