@@ -59,8 +59,6 @@ public class SafeTest {
             if (count == Main.proCount) {
                 System.out.println("当前状态安全!");
                System.out.println("安全序列为：" + Arrays.toString(safeSequence));
-//               //打印资源分配情况
-//                ShowTest.showSafe(p, safeSequence, Work, Need, All, Sum, Finish);
                 return true;
             }
             if (flag == false) {

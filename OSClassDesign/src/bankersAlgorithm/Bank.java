@@ -61,8 +61,8 @@ public class Bank {
                 if (count == Main.reType) {
                     //资源回收
                     resourceRevocvery(p, Request, Max, Ava, All, Need);
+                    System.out.println(p + "进程资源已回收");
                 }
-                System.out.println(p + "进程资源已回收");
                 ShowTest.showInit(Ava, Max,All,Need);
                 boolean change = Change();//选择是否继续
                 if (change == true){
@@ -82,8 +82,9 @@ public class Bank {
                      Need[p][i] = Need[p][i] + Request[p][i];//进程剩余需求资源情况
                  }
                 boolean change =Change();//选择是否继续
-
-                if (change == false){
+                if (change == true){
+                    continue;
+                } else {
                     System.out.println("退出成功！");
                     break;
                 }
@@ -133,12 +134,10 @@ public class Bank {
         System.out.println("是否继续提出申请?（yes/no）");
         Scanner inputChange = new Scanner(System.in);
         String change = inputChange.next();
-        if (change == "yes") {
-            return true;
-        }
-        if (change == "no") {
+        if (change.equals("no")) {
             return false;
         }
+        return true;
     }
 
 }

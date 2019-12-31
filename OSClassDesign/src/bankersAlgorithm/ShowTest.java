@@ -37,12 +37,13 @@ public class ShowTest {
         System.out.print("当前系统各类资源剩余");
         System.out.println("Available = " + Arrays.toString(Ava));
         System.out.println("当前系统资源情况：");
-        System.out.println("————————————————————-———————————");
+        System.out.println("———————————————————");
+        System.out.println("|  PID  | Allocatiion |    Need   |");
         for (int i = 0; i < Main.proCount; i++) {
             System.out.println("|  P" + i + "   | "
                     + Arrays.toString(All[i]) + " | " + Arrays.toString(Need[i]) + " |");
         }
-        System.out.println("———————————————————————————————");
+        System.out.println("———————————————————");
     }
 }
 
