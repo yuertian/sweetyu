@@ -11,7 +11,6 @@ public class Bank {
     public static void bank(int[] Ava, int[][] All,
                             int[][] Need) throws InterruptedException {
         while (true) {
-            Thread t = new Thread();
             Scanner input = new Scanner(System.in);
             System.out.print("请输入需要请求资源的进程：");
             int p = input.nextInt();
@@ -57,7 +56,7 @@ public class Bank {
                 System.out.println("当前资源分配情况：");
                 ShowTest.showBank(All, Need, Ava);
                 //如果Request = Need，资源回收
-                int count = judgeRequest(p, Request, Need);
+                int count = judgeRequest(p, Request, Need);//判断Request是否等于Need
                 if (count == Main.reType) {
                     //资源回收
                     resourceRevocvery(p, Request, Max, Ava, All, Need);
