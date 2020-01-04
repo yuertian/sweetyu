@@ -48,9 +48,6 @@
     </table>
 <a href="/showCar.jsp">查看购物车</a>
 <a href="/servlet/ExitServlet">退出登录</a><br/>
-<a href="/chains.jsp">不买东西?来玩成语接龙</a><br>
-<a href="/computer.jsp">计算器</a>
-
 
 </body>
 </html>
