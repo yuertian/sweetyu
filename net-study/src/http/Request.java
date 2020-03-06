@@ -119,4 +119,30 @@ public class Request {
             }
         }
     }
+
+    /**
+     * 根据请求头中的key获取value
+     * @param key
+     * @return
+     */
+    public String getHeader(String key) {
+        return headers.get(key);
+    }
+
+    /**
+     * 根据请求参数中的key获取到value
+     * @param key
+     * @return
+     */
+    public String getParameter(String key) {
+        return parameters.get(key);
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public String getUrl() {
+        return url;
+    }
 }

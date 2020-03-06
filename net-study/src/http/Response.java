@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Response {
 
-    private PrintWriter wtiter;
+    private PrintWriter writer;
     // http版本号
     private String version = "HTTP/1.1";
     // 状态码
@@ -32,7 +32,7 @@ public class Response {
 
     public static Response buildResponse(OutputStream outputStream) {
         Response response = new Response();
-        response.wtiter = new PrintWriter(outputStream);
+        response.writer = new PrintWriter(outputStream, true);
 
         return response;
     }
@@ -60,32 +60,73 @@ public class Response {
      */
     public void flush() {
         // 打印响应行
-        wtiter.println(version + " " + status + " " + message);
+        writer.println(version + " " + status + " " + message);
         // 打印响应头
         // 设置响应格式Content-Type（浏览器获取到响应数据以后，按照什么类型来渲染或处理数据）
-        wtiter.println("Content-Type: text/html; charset=UTF-8");
+        writer.println("Content-Type: text/html; charset=UTF-8");
         if (body.length() != 0) {
             // Content-Length字段是需要根据请求体字符串转换为二进制字节数组，再根据字符数组长度来设置
             // String.getBytes()可以将某个字符串转换为字节数组
-            wtiter.println("Content-Length: " + body.toString().getBytes().length);
+            writer.println("Content-Length: " + body.toString().getBytes().length);
         }
         // 打印业务代码设置的响应头
         for (Map.Entry<String, String> entry : headers.entrySet()) {
-            wtiter.println(entry.getKey() + ": " + entry.getValue());
+            writer.println(entry.getKey() + ": " + entry.getValue());
         }
 
         // 打印空行
-        wtiter.println();
+        writer.println();
 
         //打印响应体
         if (body.length() != 0) {
-            wtiter.println(body);
+            writer.println(body);
         }
 
         // 刷新输出流：
         // 1.初始化PrinterWriter时，第二个参数为true，设置自动刷新
         // 2.printerWriter.flush();
-//        wtiter.flush();
+//        writer.flush();
+    }
+
+    /**
+     * 构建200正常响应的相应行
+     */
+    public void build200() {
+        status = 200;
+        message = "OK";
+    }
+
+    /**
+     * 构建404找不到资源
+     * @param
+     */
+    public void build404(){
+        status = 404;
+        message = "Not Found";
+    }
+
+    /**
+     * 构建307重定向
+     */
+    public void build307() {
+        status = 307;// 301, 302, 307都可以
+        message = "Send Redirect";
+    }
+
+    /**
+     * 构建405不支持的方法
+     */
+    public void build405() {
+        status = 405;
+        message = "Method Not Allowed";
+    }
+
+    /**
+     * 构建500服务器错误
+     */
+    public void build500() {
+        status = 500;
+        message = "Internal Server Error";
     }
 
     public void setStatus(int status) {
