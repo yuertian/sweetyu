@@ -5,8 +5,8 @@ import java.util.List;
 
 public class TestAnsj {
     public static void main(String[] args) {
-        String str = "TFBOYS的易烊千玺真的太可了，大佬就是大佬，" +
-                "中戏双料第一，八千万的粉丝不是吹的";
+        String str = "你以为只是蜷缩在看不见的角落里，" +
+                "他却提着灯对你说：我可以坐在你旁边吗？";
         // 通过刚才的这个 parse 方法就直接分完，再通过 getTerms 就得到分词结果
         List<Term> terms = ToAnalysis.parse(str).getTerms();
         for (Term term : terms) {

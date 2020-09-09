@@ -14,4 +14,13 @@
 <!--        <url-pattern>/login</url-pattern>-->
 <!--    </servlet-mapping>-->
 
+    <servlet>
+        <servlet-name>DocSearcherServlet</servlet-name>
+        <servlet-class>api.DocSearcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DocSearcherServlet</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
 </web-app>

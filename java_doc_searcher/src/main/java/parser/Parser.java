@@ -2,7 +2,6 @@ package parser;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 // 遍历文档目录，读取所有的html文档内容，把结果解析成行文本文件
 // 每一行都对应一个文档，每一行中都包含 文档标题，文档的URL，文档的正文（去掉html标签的内容）
@@ -11,25 +10,23 @@ public class Parser {
     // 下载好的 Java API 文档在哪儿
     private static final String INPUT_PATH = "E:\\jdk1.8.0_73\\docs\\api";
     // 预处理模块输出文件存放的目录
-    private static final String OUTPUT_PATH = "F:\\raw_data.txt";
+    private static final String OUTPUT_PATH = "F:\\proDoc\\raw_data.txt";
 
     public static void main(String[] args) throws IOException {
         // 通过 main 完成整个预处理的过程
         FileWriter resultFileWriter = new FileWriter(new File(OUTPUT_PATH));
         // 1. 枚举出 INPUT_PATH 下所有的html文件（递归）
-        ArrayList<File> fileList = new ArrayList<File>();
+        ArrayList<File> fileList = new ArrayList<>();
         enumFile(INPUT_PATH, fileList);
 //        System.out.println(fileList);
         // 2. 针对枚举出来的html文件路径进行遍历，依次打开每个文件，并读取内容
-        //   把内容转换成需要的结构化的数据（DocInfo对象）
+         //   把内容转换成需要的结构化的数据（DocInfo对象）
         for (File f : fileList) {
-            System.out.println("converting  " + f.getAbsolutePath() + " ...");
-            // 最终输出的 raw_data 文件是一个行文本文件，每一行对应一个 html 文件
-            // line 这个对象就对应到一个文件
+            System.out.println("converting " + f.getAbsolutePath() + " ...");
+            // 最终输出的 raw_data 文件是一个行文本文件. 每一行对应一个 html 文件.
+            // line 这个对象就对应到一个文件.
             String line = convertLine(f);
-//            System.out.println(line);
-//            System.out.println("==========================");
-            // 3. 把 DocInfo 对象写入到最终的输出文件中（OUTPUT_PATH），写成行文本的形式
+            // 3. 把得到的结果写入到最终的输出文件中(OUTPUT_PATH). 写成行文本的形式
             resultFileWriter.write(line);
         }
         resultFileWriter.close();
@@ -63,7 +60,7 @@ public class Parser {
         // 线上文档 URL 形如：
         // https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html
         // 本地目录文档路径形如：
-        // E:\jdk1.8.0_73\docs\api\java/util\Collection.html
+        // E:/jdk1.8.0_73/docs/api/java/util/Collection.html
         // 线上文档的 URL 由两个部分组成：
         // part1：https://docs.oracle.com/javase/8/docs/api  固定的
         // part2：/java/util/Collection.html  和本地文件路径密切相关
@@ -74,11 +71,9 @@ public class Parser {
     }
 
     private static String convertContent(File f) throws IOException {
-        // 这个方法做两件事情：
+        // 这个方法做两件事情:
         // 1. 把 html 中的标签去掉
         // 2. 把 \n 也去掉
-        //      文件是二进制文件，就用字节流
-        //      文件是文本文件，就用字符流
         // 一个一个字符读取并判定
         FileReader fileReader = new FileReader(f);
         boolean isContent = true;
@@ -86,7 +81,7 @@ public class Parser {
         while (true) {
             int ret = fileReader.read();
             if (ret == -1) {
-                // 读取完毕
+                // 读取完毕了
                 break;
             }
             char c = (char)ret;
@@ -101,8 +96,8 @@ public class Parser {
                 }
                 output.append(c);
             } else {
-                // 当前这个内容是标签
-                // 不去写output
+                // 当前这个部分内容是标签
+                // 不去写 output
                 if (c == '>') {
                     isContent = true;
                 }
@@ -111,6 +106,7 @@ public class Parser {
         fileReader.close();
         return output.toString();
     }
+
 
     // 当这个方法递归完毕后，当前的 inputPath 目录下的所有 html 的路径
     // 就都被收集到 fileList 这个 List 中了
@@ -126,7 +122,7 @@ public class Parser {
             if (f.isDirectory()) {
                 //如果当前这个 f 是一个目录，就递归调用 enumFile
                 enumFile(f.getAbsolutePath(),fileList);
-            } else {
+            } else if (f.getAbsolutePath().endsWith(".html")){
                 // 如果 f 不是一个目录，就看文件后缀是不是 .html
                 // 如果是，就把这个文件加入到 fileList 这个 List 中
                 fileList.add(f);

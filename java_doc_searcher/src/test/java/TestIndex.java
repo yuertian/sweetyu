@@ -9,14 +9,14 @@ public class TestIndex {
         Index index = new Index();
         index.build("F:\\proDoc\\raw_data.txt");
         // 由于索引中的 key 都是小写的，查找的时候，词也得是全是小写的
-        List<Index.Weight> invertedList = index.getInverted("arraylist");
+        List<Index.Weight> invertedList = index.getInverted("collection");
         for (Index.Weight weight : invertedList) {
             System.out.println(weight.docId);
             System.out.println(weight.word);
             System.out.println(weight.weight);
             DocInfo docInfo = index.getDocInfo(weight.docId);
             System.out.println(docInfo.getTitle());
-            System.out.println("============================================");
+            System.out.println("=====================================");
         }
     }
 }
